@@ -1,0 +1,8 @@
+.film {
+  opacity: 1 !important;
+  -webkit-transform: initial !important;
+  -moz-transform: initial !important;
+  -ms-transform: initial !important;
+  -o-transform: initial !important;
+  transform: initial !important;
+}
