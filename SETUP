@@ -1,0 +1,60 @@
+# setup script for GifMaker
+
+# make directories for:
+# media: where the films and subtitle files are stored
+# output: where the created gifs are stored
+# searchdb: where the whoosh databases for each film are stored
+# tmp: where tmp gif files are placed whilst generating gifs
+mkdir media output searchdb tmp
+
+# create virtualenv and link opencv
+virtualenv venv
+source venv/bin/activate
+ln -s /usr/local/opt/opencv/lib/python2.7/site-packages/cv2.so ./venv/lib/python2.7/site-packages/cv2.so
+
+# install required python libraries
+pip install pysrt mysqlclient whoosh websocket-server scikit-image bottle numpy
+
+# create mysql db
+mysqladmin -u root -p create gifmaker
+
+# the following commands are MYSQL commands!
+DROP TABLE gifmaker.categories;DROP TABLE gifmaker.media; DROP TABLE gifmaker.quotes;
+
+CREATE TABLE gifmaker.categories (
+id INT PRIMARY KEY AUTO_INCREMENT,
+name TEXT NOT NULL,
+image TEXT NOT NULL,
+description TEXT NOT NULL,
+textID TEXT NOT NULL
+);
+
+CREATE TABLE gifmaker.media (
+id INT PRIMARY KEY AUTO_INCREMENT,
+category INT,
+name TEXT NOT NULL,
+video TEXT NOT NULL,
+subtitle TEXT NOT NULL
+);
+
+CREATE TABLE gifmaker.quotes (
+id INT AUTO_INCREMENT,
+part INT NOT NULL,
+media INT,
+quote TEXT NOT NULL,
+start TEXT NOT NULL,
+end TEXT NOT NULL,
+PRIMARY KEY(id, part)
+);
+
+#GRANT SELECT, INSERT ON gifmaker.categories TO 'quoteinsert'@'127.0.0.1' IDENTIFIED BY 'password';
+GRANT SELECT, INSERT ON gifmaker.categories TO 'quoteinsert'@'127.0.0.1';
+GRANT SELECT, INSERT ON gifmaker.media TO 'quoteinsert'@'127.0.0.1';
+GRANT SELECT, INSERT ON gifmaker.quotes TO 'quoteinsert'@'127.0.0.1';
+
+#GRANT SELECT ON gifmaker.categories TO 'quotesearch'@'127.0.0.1' IDENTIFIED BY 'password';
+GRANT SELECT ON gifmaker.categories TO 'quotesearch'@'127.0.0.1';
+GRANT SELECT ON gifmaker.media TO 'quotesearch'@'127.0.0.1';
+GRANT SELECT ON gifmaker.quotes TO 'quotesearch'@'127.0.0.1';
+
+FLUSH PRIVILEGES;
