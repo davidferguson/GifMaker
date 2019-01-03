@@ -4,14 +4,14 @@ import bottle
 import socket
 import json
 import struct
-import newsearch
+import search
 
 
 @bottle.route('/search/<category>/<query>/<counter>')
 @bottle.route('/search/<category>/<query>/<counter>/')
 def search(category, query, counter):
     # form the json to send to the search server
-    results = newsearch.quoteSearch(category, query)
+    results = search.quoteSearch(category, query)
 
     returnResult = {}
     returnResult['counter'] = counter
@@ -38,21 +38,21 @@ def static(filepath):
 @bottle.route('index.html')
 def index():
     # form the json to send to the search server
-    results = newsearch.categoryIndex()
+    results = search.categoryIndex()
     return bottle.template('index', films=results)
 
 
 @bottle.route('/category/<name>')
 @bottle.route('/category/<name>/')
 def category(name):
-    data = newsearch.getCategoryInfo(name)
+    data = search.getCategoryInfo(name)
     return bottle.template('category', category=data, films={})
 
 
 @bottle.route('/generate/<category>/<quote>')
 @bottle.route('/generate/<category>/<quote>/')
 def category(category, name):
-    data = newsearch.getCategoryInfo(name)
+    data = search.getCategoryInfo(name)
     return bottle.template('category', category=data, films={})
 
 bottle.run(host='', port=8080)
