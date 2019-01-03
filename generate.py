@@ -9,7 +9,7 @@ import json
 import traceback
 import random
 import string
-import newsearch
+import search
 import shutil
 import cv2
 import datetime
@@ -254,7 +254,7 @@ def new_message(client, server, message):
         return
 
     quoteID = str(data['quote'])
-    info = newsearch.getQuoteInfo(quoteID)
+    info = search.getQuoteInfo(quoteID)
     videoFile = info['video']
     startTime = info['start']
     endTime = info['end']
