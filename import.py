@@ -114,7 +114,7 @@ shutil.move(subFile, os.path.join(os.getcwd(), 'media/', (refName + '-' + mediaR
 
 #shutil.move(vidFile, os.path.join(os.getcwd(), 'media/', (refName + '-' + mediaRefName + os.path.splitext(vidFile)[1])))
 vidSaveFile = os.path.join(os.getcwd(), 'media/', (refName + '-' + mediaRefName + '.mp4'))
-os.system("ffmpeg -i \"" + vidFile + "\" -vf scale=640:-1 \"" + vidSaveFile + "\"")
+os.system("ffmpeg -i \"" + vidFile + "\" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2,scale=640:-1\" \"" + vidSaveFile + "\"")
 
 subFile = os.path.join('media/', (refName + '-' + mediaRefName + os.path.splitext(subFile)[1]))
 vidFile = os.path.join('media/', (refName + '-' + mediaRefName + '.mp4')
